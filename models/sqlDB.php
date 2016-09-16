@@ -6,7 +6,7 @@
 
         function __construct($config) {
             if(!self::$pdo) {
-                self::$pdo = DB::connectToDB($config['dbOpt']);
+                self::$pdo = DB::connectToSQL($config['sqlOpt']);
             }
         }
 

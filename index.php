@@ -15,3 +15,12 @@
    $config = require 'config.php';
 
    use MotoDB\sqlDB as sqlDB;
+
+   $dbName = 'DB\moto\DB\Auto_dat.mdb';
+   $pdo = new \PDO("odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=$dbName;Uid=;Pwd=;");
+   $pdo->exec("set names utf8");
+   
+   $stmt = $pdo->query('SELECT Код FROM item WHERE Код = 952');
+   print_r($stmt->fetchColumn());
+
+   echo "\nI'm done!";
