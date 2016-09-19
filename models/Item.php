@@ -1,14 +1,33 @@
 <?php
     namespace MotoDB;
 
-    class Item {
+    class Item implements DB{
         static private $pdo;
         static private $itemFromDB = [];
 
         function __construct($config) {
             if(!self::$pdo) {
-                self::$pdo = DB::connectToMySQL($config['sqlOpt']);
+                self::$pdo = $this->connectToDB($config['sqlOpt']);
             }
+        }
+
+        public function connectToDB($dbOptions) {
+            if (self::$pdo) {
+                return self::$pdo;
+            }
+
+            $host = $dbOptions['host'];
+            $db   = $dbOptions['db'];
+            $user = $dbOptions['user'];
+            $pass = $dbOptions['pass'];
+
+            $dsn = "mysql:host = $host; dbname = $db";
+            $options = [
+                \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
+            ];
+
+            return self::$pdo = new \PDO($dsn, $user, $pass, $options);
         }
 
         public function setToDB($item) {

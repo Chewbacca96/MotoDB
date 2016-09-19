@@ -1,13 +1,30 @@
 <?php
     namespace MotoDB;
 
-    class AccessDB {
+    class AccessDB implements DB{
         static private $pdo;
 
         function __construct($config) {
             if(!self::$pdo) {
-                self::$pdo = DB::connectToAccess($config['accessOpt']);
+                self::$pdo = $this->connectToDB($config['accessOpt']);
             }
+        }
+
+        public function connectToDB($dbOptions) {
+            if (self::$pdo) {
+                return self::$pdo;
+            }
+
+            $driver = $dbOptions['driver'];
+            $db     = $dbOptions['db'];
+            $user   = $dbOptions['user'];
+            $pass   = $dbOptions['pass'];
+
+            self::$pdo = new \PDO("odbc:Driver=$driver;Dbq=$db;Uid=$user;Pwd=$pass");
+            self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            self::$pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+
+            return self::$pdo;
         }
 
         public function getItems() {
