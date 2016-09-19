@@ -2,11 +2,12 @@
     namespace MotoDB;
 
     class DB {
-        static private $pdo;
+        static private $pdoMySQL;
+        static private $pdoAccess;
 
-        static public function connectToSQL($dbOptions) {
-            if (self::$pdo) {
-                return self::$pdo;
+        static public function connectToMySQL($dbOptions) {
+            if (self::$pdoMySQL) {
+                return self::$pdoMySQL;
             }
 
             $host = $dbOptions['host'];
@@ -20,22 +21,24 @@
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
             ];
 
-            return new \PDO($dsn, $user, $pass, $options);
+            return self::$pdoMySQL = new \PDO($dsn, $user, $pass, $options);
         }
 
         static public function connectToAccess($dbOptions) {
-            if (self::$pdo) {
-                return self::$pdo;
+            if (self::$pdoAccess) {
+                return self::$pdoAccess;
             }
+
+            $driver = '{Microsoft Access Driver (*.mdb, *.accdb)}';
 
             $db   = $dbOptions['db'];
             $user = $dbOptions['user'];
             $pass = $dbOptions['pass'];
 
-            self::$pdo = new \PDO("odbc:Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=$db;Uid=$user;Pwd=$pass");
-            self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            self::$pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+            self::$pdoAccess = new \PDO("odbc:Driver=$driver;;Dbq=$db;Uid=$user;Pwd=$pass");
+            self::$pdoAccess->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            self::$pdoAccess->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 
-            return self::$pdo;
+            return self::$pdoAccess;
         }
     }    
