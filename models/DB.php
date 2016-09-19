@@ -35,7 +35,7 @@
             $user = $dbOptions['user'];
             $pass = $dbOptions['pass'];
 
-            self::$pdoAccess = new \PDO("odbc:Driver=$driver;;Dbq=$db;Uid=$user;Pwd=$pass");
+            self::$pdoAccess = new \PDO("odbc:Driver=$driver;Dbq=$db;Uid=$user;Pwd=$pass");
             self::$pdoAccess->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             self::$pdoAccess->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 

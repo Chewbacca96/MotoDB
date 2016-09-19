@@ -10,7 +10,6 @@
     */
 
     //Сделать интерфейс DB и иимплементировать его в виде классов
-    //Добить проблему с кодировкой названий
 
     ini_set('max_execution_time', 0);
     ini_set('log_errors', 'On');
@@ -41,5 +40,8 @@
         if ($item['shop_3'] > 0) {
             $Shops->getFromDB($item, 3);
         }
+
+        /*$enc = mb_detect_encoding($item['name']);
+        echo mb_convert_encoding($item['name'], $enc, 'windows-1251') . "\n";*/
     }
     echo "\nI'm done!";

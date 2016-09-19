@@ -12,8 +12,11 @@
         }
 
         public function setToDB($item) {
-            $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price) VALUES (?, ?, ?, ?)');
-            $stmt->execute([$item['catalog_code'], $item['code'], utf8_encode($item['name']), $item['price_rub']]);
+            $encoding = mb_detect_encoding($item['name']);
+            $item['name'] = mb_convert_encoding($item['name'], $encoding, 'windows-1251');
+
+            $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price, old_price) VALUES (?, ?, ?, ?, ?)');
+            $stmt->execute([$item['catalog_code'], $item['code'], $item['name'], $item['price_rub'], 0]);
 
             return self::$pdo->lastInsertId();
         }
