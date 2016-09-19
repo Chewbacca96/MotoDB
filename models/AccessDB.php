@@ -10,14 +10,7 @@
             }
         }
 
-        public function residue() {
-            $shopResidue[1] = self::$pdo->query('SELECT code FROM q_item WHERE shop_1 > 0')->fetchAll(\PDO::FETCH_COLUMN);
-            $shopResidue[2] = self::$pdo->query('SELECT code FROM q_item WHERE shop_2 > 0')->fetchAll(\PDO::FETCH_COLUMN);
-            $shopResidue[3] = self::$pdo->query('SELECT code FROM q_item WHERE shop_3 > 0')->fetchAll(\PDO::FETCH_COLUMN);
-            return $shopResidue;
-        }
-
         public function getItems() {
-            return self::$pdo->query('SELECT catalog_code, code, name, price_rub FROM q_item')->fetchAll();
+            return self::$pdo->query('SELECT catalog_code, code, name, shop_1, shop_2, shop_3, price_rub FROM q_item')->fetchAll();
         }
     }

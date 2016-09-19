@@ -1,7 +1,7 @@
 <?php
     namespace MotoDB;
 
-    class mySqlDB {
+    class Item {
         static private $pdo;
         static private $itemFromDB = [];
 
@@ -14,6 +14,7 @@
         public function setToDB($item) {
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price) VALUES (?, ?, ?, ?)');
             $stmt->execute([$item['catalog_code'], $item['code'], utf8_encode($item['name']), $item['price_rub']]);
+
             return self::$pdo->lastInsertId();
         }
 
