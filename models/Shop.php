@@ -3,7 +3,6 @@
 
     class Shop {
         static private $pdo;
-        static private $itemFromDB = [];
         static private $itemFromShop = [];
 
         function __construct($config) {

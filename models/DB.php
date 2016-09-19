@@ -29,11 +29,10 @@
                 return self::$pdoAccess;
             }
 
-            $driver = '{Microsoft Access Driver (*.mdb, *.accdb)}';
-
-            $db   = $dbOptions['db'];
-            $user = $dbOptions['user'];
-            $pass = $dbOptions['pass'];
+            $driver = $dbOptions['driver'];
+            $db     = $dbOptions['db'];
+            $user   = $dbOptions['user'];
+            $pass   = $dbOptions['pass'];
 
             self::$pdoAccess = new \PDO("odbc:Driver=$driver;Dbq=$db;Uid=$user;Pwd=$pass");
             self::$pdoAccess->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

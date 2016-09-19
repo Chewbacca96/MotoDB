@@ -7,8 +7,9 @@
             'pass' => '123'
         ],
         'accessOpt' => [
-            'db'   => 'DB\moto\DB\Auto_dat.mdb',
-            'user' => '',
-            'pass' => ''
+            'driver' => '{Microsoft Access Driver (*.mdb, *.accdb)}',
+            'db'     => 'DB\moto\DB\Auto_dat.mdb',
+            'user'   => '',
+            'pass'   => ''
         ]
     ];
