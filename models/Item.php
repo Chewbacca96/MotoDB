@@ -1,38 +1,18 @@
 <?php
     namespace MotoDB;
 
-    class Item implements DB{
+    class Item {
         static private $pdo;
         static private $itemFromDB = [];
 
         function __construct($config) {
             if(!self::$pdo) {
-                self::$pdo = $this->connectToDB($config['sqlOpt']);
+                self::$pdo = MySqlDB::connectToDB($config['sqlOpt']);
             }
-        }
-
-        public function connectToDB($dbOptions) {
-            if (self::$pdo) {
-                return self::$pdo;
-            }
-
-            $host = $dbOptions['host'];
-            $db   = $dbOptions['db'];
-            $user = $dbOptions['user'];
-            $pass = $dbOptions['pass'];
-
-            $dsn = "mysql:host = $host; dbname = $db";
-            $options = [
-                \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
-                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
-            ];
-
-            return self::$pdo = new \PDO($dsn, $user, $pass, $options);
         }
 
         public function setToDB($item) {
-            $encoding = mb_detect_encoding($item['name']);
-            $item['name'] = mb_convert_encoding($item['name'], $encoding, 'windows-1251');
+            $item['name'] = mb_convert_encoding($item['name'], 'utf-8', 'windows-1251');
 
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price, old_price) VALUES (?, ?, ?, ?, ?)');
             $stmt->execute([$item['catalog_code'], $item['code'], $item['name'], $item['price_rub'], 0]);

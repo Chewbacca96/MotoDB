@@ -1,16 +1,16 @@
 <?php
     namespace MotoDB;
 
-    class AccessDB implements DB{
+    class AccessDB implements DB {
         static private $pdo;
 
         function __construct($config) {
             if(!self::$pdo) {
-                self::$pdo = $this->connectToDB($config['accessOpt']);
+                self::$pdo = self::connectToDB($config['accessOpt']);
             }
         }
 
-        public function connectToDB($dbOptions) {
+        static public function connectToDB($dbOptions) {
             if (self::$pdo) {
                 return self::$pdo;
             }

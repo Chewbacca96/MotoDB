@@ -2,5 +2,5 @@
     namespace MotoDB;
 
     interface DB {
-        public function connectToDB($dbOptions);
+        static public function connectToDB($dbOptions);
     }

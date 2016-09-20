@@ -9,14 +9,15 @@
     Добавление и обновление остатков по товарам и магазинам из Access'a в MySql базу в t_item_shop
     */
 
-    //Сделать интерфейс DB и иимплементировать его в виде классов
+    //Добавить обновление остатков, в том числе и 0
+    //Сделать мульти запрос для добавления остатков
+
+    require 'vendor\autoload.php';
+    $config = require 'config.php';
 
     ini_set('max_execution_time', 0);
     ini_set('log_errors', 'On');
-    ini_set('error_log', 'php_errors.log');
-   
-    require 'vendor\autoload.php';
-    $config = require 'config.php';
+    ini_set('error_log', $config['errorLog']);
 
     use MotoDB\AccessDB as AccessDB;
     use MotoDB\Item as Item;
@@ -29,16 +30,8 @@
     foreach ($Access->getItems() as $item) {
         $Items->getFromDB($item);
 
-        if ($item['shop_1'] > 0) {
-            $Shops->getFromDB($item, 1);
-        }
-
-        if ($item['shop_2'] > 0) {
-            $Shops->getFromDB($item, 2);
-        }
-
-        if ($item['shop_3'] > 0) {
-            $Shops->getFromDB($item, 3);
-        }
+        $Shops->getFromDB($item, 1);
+        $Shops->getFromDB($item, 2);
+        $Shops->getFromDB($item, 3);
     }
     echo "\nI'm done!";
