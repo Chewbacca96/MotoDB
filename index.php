@@ -9,9 +9,6 @@
     Добавление и обновление остатков по товарам и магазинам из Access'a в MySql базу в t_item_shop
     */
 
-    //Добавить обновление остатков, в том числе и 0
-    //Сделать мульти запрос для добавления остатков
-
     require 'vendor\autoload.php';
     $config = require 'config.php';
 
@@ -28,10 +25,11 @@
     $Shops  = new Shop($config);
 
     foreach ($Access->getItems() as $item) {
-        $Items->getFromDB($item);
+        $item['id'] = $Items->getFromDB($item);
 
-        $Shops->getFromDB($item, 1);
+        $Shops->setToDB($item);
+        /*$Shops->getFromDB($item, 1);
         $Shops->getFromDB($item, 2);
-        $Shops->getFromDB($item, 3);
+        $Shops->getFromDB($item, 3);*/
     }
     echo "\nI'm done!";
