@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Сен 21 2016 г., 14:11
+-- Время создания: Сен 23 2016 г., 00:38
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.3
 
@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `t_item_copy` (
 CREATE TABLE IF NOT EXISTS `t_item_shop` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) DEFAULT NULL COMMENT 'ссылка на магазин',
+  `code` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'код товара',
   `item_id` int(11) NOT NULL COMMENT 'id товара',
   `count` int(11) DEFAULT NULL COMMENT 'остаток',
   PRIMARY KEY (`id`),
