@@ -12,6 +12,17 @@
         }
 
         public function setToDB($item) {
+            if ($item['code'] < 1 || $item['code'] == null) {
+                error_log('Data in the code field may not be less than 1 or null.', 0);
+                exit();
+            } elseif ($item['catalog_code'] < 1 || $item['catalog_code'] == null) {
+                error_log('Data in the catalog_code field may not be less than 1 or null.', 0);
+                exit();
+            } elseif ($item['price_rub'] < 0 || $item['price_rub'] == null) {
+                error_log('Data in the price_rub field may not be less than 0 or null.', 0);
+                exit();
+            }
+
             $item['name'] = mb_convert_encoding($item['name'], 'utf-8', 'windows-1251');
 
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price, old_price) VALUES (?, ?, ?, ?, ?)');

@@ -42,6 +42,20 @@
         }*/
 
         public function setToDB($item) {
+            if ($item['id'] < 1 || $item['id'] == null) {
+                error_log('Data in the id field may not be less than 1 or null.', 0);
+                exit();
+            } elseif ($item["shop_1"] < 0 || $item["shop_1"] = null) {
+                error_log('Data in the shop_1 field may not be less than 0 or null.', 0);
+                exit();
+            } elseif ($item["shop_2"] < 0 || $item["shop_2"] = null) {
+                error_log('Data in the shop_2 field may not be less than 0 or null.', 0);
+                exit();
+            } elseif ($item["shop_3"] < 0 || $item["shop_3"] = null) {
+                error_log('Data in the shop_3 field may not be less than 0 or null.', 0);
+                exit();
+            }
+
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_shop (shop_id, item_id, count) 
                 VALUES (:shopID1, :itemID, :count1), (:shopID2, :itemID, :count2), (:shopID3, :itemID, :count3) 
                 ON DUPLICATE KEY UPDATE count = VALUES(count)');
