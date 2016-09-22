@@ -15,7 +15,12 @@
             $item['name'] = mb_convert_encoding($item['name'], 'utf-8', 'windows-1251');
 
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price, old_price) VALUES (?, ?, ?, ?, ?)');
-            $stmt->execute([$item['catalog_code'], $item['code'], $item['name'], $item['price_rub'], 0]);
+            $stmt = $stmt->execute([$item['catalog_code'], $item['code'], $item['name'], $item['price_rub'], 0]);
+            
+            if (!$stmt) {
+                error_log('Item::setToDB - cant set data to DB.', 0);
+                exit();
+            }
 
             return self::$pdo->lastInsertId();
         }

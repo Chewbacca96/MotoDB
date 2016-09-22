@@ -3,7 +3,7 @@
 
     class Shop {
         static private $pdo;
-        static private $itemFromShop = [];
+        //static private $itemFromShop = [];
 
         function __construct($config) {
             if(!self::$pdo) {
@@ -45,7 +45,7 @@
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_shop (shop_id, item_id, count) 
                 VALUES (:shopID1, :itemID, :count1), (:shopID2, :itemID, :count2), (:shopID3, :itemID, :count3) 
                 ON DUPLICATE KEY UPDATE count = VALUES(count)');
-            $stmt->execute([
+            $stmt = $stmt->execute([
                 'shopID1' => 1,
                 'shopID2' => 2,
                 'shopID3' => 3,
@@ -54,6 +54,11 @@
                 'count2'  => $item["shop_2"],
                 'count3'  => $item["shop_3"]
             ]);
+
+            if (!$stmt) {
+                error_log('Item::setToDB - cant set data to DB.', 0);
+                exit();
+            }
             
             return self::$pdo->lastInsertId();
         }
