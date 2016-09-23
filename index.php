@@ -31,11 +31,10 @@
 
     foreach ($Access->getItems() as $item) {
         $item['id'] = $Items->getFromDB($item);
+        print_r($item);
+        echo "\n";
 
         $Shops->setToDB($item);
-        /*$Shops->getFromDB($item, 1);
-        $Shops->getFromDB($item, 2);
-        $Shops->getFromDB($item, 3);*/
     }
 
     echo "\nI'm done!";

@@ -28,13 +28,6 @@
         }
 
         public function getItems() {
-            self::$pdo = self::$pdo->query('SELECT catalog_code, code, name, shop_1, shop_2, shop_3, price_rub FROM q_item')->fetchAll();
-            
-            if(!self::$pdo) {
-                error_log('AccessDB::getItems - cant get data from DB.', 0);
-                exit();
-            }
-
-            return self::$pdo;
+            return self::$pdo->query('SELECT catalog_code, code, name, shop_1, shop_2, shop_3, price_rub FROM q_item')->fetchAll();
         }
     }
