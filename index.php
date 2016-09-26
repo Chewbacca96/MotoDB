@@ -31,8 +31,6 @@
 
     foreach ($Access->getItems() as $item) {
         $item['id'] = $Items->getFromDB($item);
-        print_r($item);
-        echo "\n";
 
         $Shops->setToDB($item);
     }

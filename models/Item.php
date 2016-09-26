@@ -14,11 +14,11 @@
         public function setToDB($item) {
             try {
                 if ($item['code'] < 1 || $item['code'] == null) {
-                    throw new \Exception('Data in the code field may not be less than 1 or null.');
+                    throw new DataException('Data in the code field may not be less than 1 or null.');
                 } elseif ($item['catalog_code'] < 1 || $item['catalog_code'] == null) {
-                    throw new \Exception('Data in the catalog_code field may not be less than 1 or null.');
+                    throw new DataException('Data in the catalog_code field may not be less than 1 or null.');
                 } elseif ($item['price_rub'] < 0 || $item['price_rub'] == null) {
-                    throw new \Exception('Data in the price_rub field may not be less than 0 or null.');
+                    throw new DataException('Data in the price_rub field may not be less than 0 or null.');
                 }
 
                 $item['name'] = mb_convert_encoding($item['name'], 'utf-8', 'windows-1251');
@@ -26,16 +26,12 @@
                 $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_copy (category_id, code, name, price, old_price) VALUES (?, ?, ?, ?, ?)');
                 $stmt->execute([$item['catalog_code'], $item['code'], $item['name'], $item['price_rub'], 0]);
 
-                self::$pdo = self::$pdo->lastInsertId();
-            } catch(\Exception $exsp) {
-                error_log('Error: ' . $exsp->getMessage(), 0);
-                self::$pdo = null;
-            } catch (\PDOException $exsp) {
-                error_log('Error: ' . $exsp->getMessage(), 0);
-                self::$pdo = null;
+                $id = self::$pdo->lastInsertId();
+            } catch(DataException $exsp) {
+                $id = $exsp->errorLog();
             }
 
-            return self::$pdo;
+            return $id;
         }
 
         public function getFromDB($item, $append = true) {

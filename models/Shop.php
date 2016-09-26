@@ -44,13 +44,13 @@
         public function setToDB($item) {
             try {
                 if ($item['id'] < 1 || $item['id'] == null) {
-                    throw new \Exception('Data in the id field may not be less than 1 or null.');
+                    throw new DataException('Data in the id field may not be less than 1 or null.');
                 } elseif ($item["shop_1"] < 0 || $item["shop_1"] = null) {
-                    throw new \Exception('Data in the shop_1 field may not be less than 0 or null.');
+                    throw new DataException('Data in the shop_1 field may not be less than 0 or null.');
                 } elseif ($item["shop_2"] < 0 || $item["shop_2"] = null) {
-                    throw new \Exception('Data in the shop_2 field may not be less than 0 or null.');
+                    throw new DataException('Data in the shop_2 field may not be less than 0 or null.');
                 } elseif ($item["shop_3"] < 0 || $item["shop_3"] = null) {
-                    throw new \Exception('Data in the shop_3 field may not be less than 0 or null.');
+                    throw new DataException('Data in the shop_3 field may not be less than 0 or null.');
                 }
 
                 $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_shop (shop_id, item_id, count)
@@ -66,15 +66,11 @@
                     'count3'  => $item["shop_3"]
                 ]);
 
-                self::$pdo = self::$pdo->lastInsertId();
-            } catch(\Exception $exsp) {
-                error_log('Error: ' . $exsp->getMessage(), 0);
-                self::$pdo = null;
-            } catch(\PDOException $exsp) {
-                error_log('Error: ' . $exsp->getMessage(), 0);
-                self::$pdo = null;
+                $id = self::$pdo->lastInsertId();
+            } catch(DataException $exsp) {
+                $id = $exsp->errorLog();
             }
             
-            return self::$pdo;
+            return $id;
         }
     }
