@@ -13,5 +13,6 @@
             'user'    => '',
             'pass'    => ''
         ],
-        'errorLog'    => 'php_errors.log'
+        'errorLog'    => 'php_errors.log',
+        'is_append_new_items' => true
     ];

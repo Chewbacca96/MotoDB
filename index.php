@@ -8,11 +8,6 @@
     Добавление в MySql базу новых товаров с пустым полем checked_on
     Добавление и обновление остатков по товарам и магазинам из Access'a в MySql базу в t_item_shop
     */
-        
-    //файл .sql должен содержать код только для новых полей
-    //каждый класс работает со своей моделью данных
-    //соответствие полей (бизнес логика) в основном файле
-    //добавить проверок и логов для автономной работы
 
     require 'vendor\autoload.php';
     $config = require 'config.php';
@@ -30,9 +25,14 @@
     $Shops  = new Shop($config);
 
     foreach ($Access->getItems() as $item) {
-        $item['id'] = $Items->getFromDB($item);
+        try {
+            $item['id'] = $Items->getFromDB($item, $config['is_append_new_items']);
 
-        $Shops->setToDB($item);
+            $Shops->getFromDB($item, $config['is_append_new_items']);
+        } catch(\PDOException $pdoExsp) {
+        } catch(DataException $exsp) {
+            $exsp->errorLog();
+        } 
     }
 
     echo "\nI'm done!";

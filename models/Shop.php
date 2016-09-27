@@ -3,7 +3,7 @@
 
     class Shop {
         static private $pdo;
-        //static private $itemFromShop = [];
+        static private $id;
 
         function __construct($config) {
             if(!self::$pdo) {
@@ -11,66 +11,46 @@
             }
         }
 
-        /*public function updateToDB($item, $shopID) {
-            $stmt = self::$pdo->prepare('UPDATE motodb2.t_item_shop SET count = ? WHERE item_id = ? AND shop_id = ?');
-            return $stmt->execute([$item["shop_$shopID"], $item['id'], $shopID]);
-        }
+        public function setToDB($item) {
+            if ($item['id'] < 1 || $item['id'] == null) {
+                throw new DataException('Data in the id field may not be less than 1 or null.');
+            } elseif ($item["shop_1"] < 0 || $item["shop_1"] = null) {
+                throw new DataException('Data in the shop_1 field may not be less than 0 or null.');
+            } elseif ($item["shop_2"] < 0 || $item["shop_2"] = null) {
+                throw new DataException('Data in the shop_2 field may not be less than 0 or null.');
+            } elseif ($item["shop_3"] < 0 || $item["shop_3"] = null) {
+                throw new DataException('Data in the shop_3 field may not be less than 0 or null.');
+            }
 
-        public function setToDB($item, $shopID) {
             $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_shop (shop_id, item_id, count)
-                VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE count = VALUES(count)');
-            $stmt->execute([$shopID, $item['id'], $item["shop_$shopID"]]);
-
+                VALUES (:shopID1, :itemID, :count1), (:shopID2, :itemID, :count2), (:shopID3, :itemID, :count3) 
+                ON DUPLICATE KEY UPDATE count = VALUES(count)');
+            $stmt->execute([
+                'shopID1' => 1,
+                'shopID2' => 2,
+                'shopID3' => 3,
+                'itemID'  => $item['id'],
+                'count1'  => $item["shop_1"],
+                'count2'  => $item["shop_2"],
+                'count3'  => $item["shop_3"]
+            ]);
+            
             return self::$pdo->lastInsertId();
         }
 
-        public function getFromDB($item, $shopID, $append = true) {
-            $stmt = self::$pdo->prepare('SELECT id FROM motodb2.t_item_shop WHERE item_id = ? AND shop_id = ?');
-            $stmt->execute([$item['id'], $shopID]);
+        public function getFromDB($item, $append = true) {
+            $stmt = self::$pdo->prepare('SELECT id from motodb2.t_item_shop WHERE id = ?');
+            $stmt->execute([$item['id']]);
             $stmt = $stmt->fetchColumn();
 
             if ($stmt) {
-                $this->setToDB($item, $shopID);
-                self::$itemFromShop = $stmt;
+                self::$id = $stmt;
             } elseif ($append) {
-                self::$itemFromShop = $this->setToDB($item, $shopID);
+                self::$id = $this->setToDB($item);
             } else {
-                self::$itemFromShop = null;
+                self::$id = null;
             }
 
-            return self::$itemFromShop;
-        }*/
-
-        public function setToDB($item) {
-            try {
-                if ($item['id'] < 1 || $item['id'] == null) {
-                    throw new DataException('Data in the id field may not be less than 1 or null.');
-                } elseif ($item["shop_1"] < 0 || $item["shop_1"] = null) {
-                    throw new DataException('Data in the shop_1 field may not be less than 0 or null.');
-                } elseif ($item["shop_2"] < 0 || $item["shop_2"] = null) {
-                    throw new DataException('Data in the shop_2 field may not be less than 0 or null.');
-                } elseif ($item["shop_3"] < 0 || $item["shop_3"] = null) {
-                    throw new DataException('Data in the shop_3 field may not be less than 0 or null.');
-                }
-
-                $stmt = self::$pdo->prepare('INSERT INTO motodb2.t_item_shop (shop_id, item_id, count)
-                    VALUES (:shopID1, :itemID, :count1), (:shopID2, :itemID, :count2), (:shopID3, :itemID, :count3) 
-                    ON DUPLICATE KEY UPDATE count = VALUES(count)');
-                $stmt->execute([
-                    'shopID1' => 1,
-                    'shopID2' => 2,
-                    'shopID3' => 3,
-                    'itemID'  => $item['id'],
-                    'count1'  => $item["shop_1"],
-                    'count2'  => $item["shop_2"],
-                    'count3'  => $item["shop_3"]
-                ]);
-
-                $id = self::$pdo->lastInsertId();
-            } catch(DataException $exsp) {
-                $id = $exsp->errorLog();
-            }
-            
-            return $id;
+            return self::$id;
         }
     }
