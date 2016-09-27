@@ -13,14 +13,14 @@
             }
         }
 
-        public function setToDB($item) {
-            if ($item['id'] < 1 || $item['id'] == null) {
+        public function setToDB($id, $shop_1, $shop_2, $shop_3) {
+            if ($id < 1 || $id == null) {
                 throw new DataException('Data in the id field may not be less than 1 or null.');
-            } elseif ($item["shop_1"] < 0 || $item["shop_1"] = null) {
+            } elseif ($shop_1 < 0 || $shop_1 = null) {
                 throw new DataException('Data in the shop_1 field may not be less than 0 or null.');
-            } elseif ($item["shop_2"] < 0 || $item["shop_2"] = null) {
+            } elseif ($shop_2 < 0 || $shop_2 = null) {
                 throw new DataException('Data in the shop_2 field may not be less than 0 or null.');
-            } elseif ($item["shop_3"] < 0 || $item["shop_3"] = null) {
+            } elseif ($shop_3 < 0 || $shop_3 = null) {
                 throw new DataException('Data in the shop_3 field may not be less than 0 or null.');
             }
 
@@ -31,28 +31,12 @@
                 'shopID1' => 1,
                 'shopID2' => 2,
                 'shopID3' => 3,
-                'itemID'  => $item['id'],
-                'count1'  => $item["shop_1"],
-                'count2'  => $item["shop_2"],
-                'count3'  => $item["shop_3"]
+                'itemID'  => $id,
+                'count1'  => $shop_1,
+                'count2'  => $shop_2,
+                'count3'  => $shop_3
             ]);
             
             return self::$pdo->lastInsertId();
-        }
-
-        public function getFromDB($item, $append = true) {
-            $stmt = self::$pdo->prepare('SELECT id from motodb2.t_item_shop WHERE id = ?');
-            $stmt->execute([$item['id']]);
-            $stmt = $stmt->fetchColumn();
-
-            if ($stmt) {
-                self::$id = $stmt;
-            } elseif ($append) {
-                self::$id = $this->setToDB($item);
-            } else {
-                self::$id = null;
-            }
-
-            return self::$id;
         }
     }

@@ -19,7 +19,6 @@
     use MotoDB\models\AccessDB;
     use MotoDB\models\Item;
     use MotoDB\models\Shop;
-    use MotoDB\exceptions\PdoException;
     use MotoDB\exceptions\DataException;
 
     $Access = new AccessDB($config);
@@ -30,11 +29,13 @@
         try {
             $item['id'] = $Items->getFromDB($item, $config['isAppendNewItems']);
 
-            $Shops->getFromDB($item, $config['isAppendNewItems']);
-        } catch(PdoException $e) {
-            $e->errorLog();
+            if ($item['id']) {
+                $Shops->setToDB($item['id'], $item['shop_1'], $item['shop_2'], $item['shop_2']);
+            }
+        } catch(\PDOException $e) {
+            error_log('Error: ' . $e->getMessage());
         } catch(DataException $e) {
-            $e->errorLog();
+            error_log('Error: ' . $e->getMessage());
         } 
     }
 
