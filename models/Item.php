@@ -1,5 +1,7 @@
 <?php
-    namespace MotoDB;
+    namespace MotoDB\models;
+
+    use MotoDB\exceptions\DataException;
 
     class Item {
         static private $pdo;

@@ -1,7 +1,9 @@
 {
 	"autoload": {
 		"psr-4": {
-			"MotoDB\\": "MotoDB/"
+			"MotoDB\\": "/",
+			"MotoDB\\models\\": "models/",
+			"MotoDB\\exceptions\\": "exceptions/"
 		}
 	}
 }

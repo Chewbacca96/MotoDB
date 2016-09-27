@@ -1,5 +1,5 @@
 <?php
-    namespace MotoDB;
+    namespace MotoDB\models;
 
     class MySqlDB implements DB {
         static private $pdo;

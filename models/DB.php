@@ -1,5 +1,5 @@
 <?php
-    namespace MotoDB;
+    namespace MotoDB\models;
 
     interface DB {
         static public function connectToDB($dbOptions);

@@ -14,5 +14,5 @@
             'pass'    => ''
         ],
         'errorLog'    => 'php_errors.log',
-        'is_append_new_items' => true
+        'isAppendNewItems' => true
     ];

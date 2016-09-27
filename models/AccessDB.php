@@ -1,5 +1,5 @@
 <?php
-    namespace MotoDB;
+    namespace MotoDB\models;
 
     class AccessDB implements DB {
         static private $pdo;

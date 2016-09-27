@@ -16,9 +16,11 @@
     ini_set('log_errors', 'On');
     ini_set('error_log', $config['errorLog']);
 
-    use MotoDB\AccessDB as AccessDB;
-    use MotoDB\Item as Item;
-    use MotoDB\Shop as Shop;
+    use MotoDB\models\AccessDB;
+    use MotoDB\models\Item;
+    use MotoDB\models\Shop;
+    use MotoDB\exceptions\PdoException;
+    use MotoDB\exceptions\DataException;
 
     $Access = new AccessDB($config);
     $Items  = new Item($config);
@@ -26,12 +28,13 @@
 
     foreach ($Access->getItems() as $item) {
         try {
-            $item['id'] = $Items->getFromDB($item, $config['is_append_new_items']);
+            $item['id'] = $Items->getFromDB($item, $config['isAppendNewItems']);
 
-            $Shops->getFromDB($item, $config['is_append_new_items']);
-        } catch(\PDOException $pdoExsp) {
-        } catch(DataException $exsp) {
-            $exsp->errorLog();
+            $Shops->getFromDB($item, $config['isAppendNewItems']);
+        } catch(PdoException $e) {
+            $e->errorLog();
+        } catch(DataException $e) {
+            $e->errorLog();
         } 
     }
 
