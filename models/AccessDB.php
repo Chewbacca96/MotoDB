@@ -1,33 +1,47 @@
 <?php
-    namespace MotoDB\models;
+namespace MotoDB\models;
 
-    class AccessDB implements DB {
-        static private $pdo;
+use PDO;
 
-        function __construct($config) {
-            if(!self::$pdo) {
-                self::$pdo = self::connectToDB($config['accessOpt']);
-            }
-        }
+class AccessDB implements DB 
+{
+    private static $pdo;
 
-        static public function connectToDB($dbOptions) {
-            if (self::$pdo) {
-                return self::$pdo;
-            }
-
-            $driver = $dbOptions['driver'];
-            $db     = $dbOptions['db'];
-            $user   = $dbOptions['user'];
-            $pass   = $dbOptions['pass'];
-
-            self::$pdo = new \PDO("odbc:Driver=$driver;Dbq=$db;Uid=$user;Pwd=$pass");
-            self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            self::$pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-
-            return self::$pdo;
-        }
-
-        public function getItems() {
-            return self::$pdo->query('SELECT catalog_code, code, name, shop_1, shop_2, shop_3, price_rub FROM q_item')->fetchAll();
+    /**
+     * AccessDB конструктор
+     *
+     * @param string $dsn название блока опций, прописанного в /etc/odbc.ini
+     */
+    public function __construct($dsn) 
+    {
+        if(!self::$pdo) {
+            self::$pdo = self::connectToDB($dsn);
         }
     }
+
+    /**
+     * Функция для подключения к базе данных
+     *
+     * @param string $dsn название блока опций, прописанного в /etc/odbc.ini
+     *
+     * @return object объект, представляющий соединение с сервером базы данных
+     */
+    public static function connectToDB($dsn) 
+    {
+        self::$pdo = new PDO("odbc:$dsn");
+        self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+        return self::$pdo;
+    }
+
+    /**
+     * Функция возвращает массив данных из таблицы Тов
+     *
+     * @return array массив данных из таблицы Тов
+     */
+    public function getItems() 
+    {
+        return self::$pdo->query('SELECT catalog_code, code, name, shop_1, shop_2, shop_3, price_rub FROM q_item')->fetchAll();
+    }
+}

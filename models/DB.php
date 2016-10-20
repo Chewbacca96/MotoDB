@@ -1,6 +1,7 @@
 <?php
-    namespace MotoDB\models;
+namespace MotoDB\models;
 
-    interface DB {
-        static public function connectToDB($dbOptions);
-    }
+interface DB 
+{
+    public static function connectToDB($dbOptions);
+}
